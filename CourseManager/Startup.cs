@@ -19,9 +19,13 @@ namespace CourseManager
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddControllersWithViews().AddNewtonsoftJson();
+      services.AddMvc().AddApplicationPart(typeof(Startup).Assembly);
+      AddSpaServices(services);
+    }
 
-      services.AddControllersWithViews();
-
+    protected virtual void AddSpaServices(IServiceCollection services)
+    {
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {
@@ -40,9 +44,7 @@ namespace CourseManager
       {
         app.UseExceptionHandler("/Error");
       }
-      
-      app.UseStaticFiles();
-      app.UseSpaStaticFiles();
+
       app.UseRouting();
 
       app.UseEndpoints(endpoints =>
@@ -51,7 +53,13 @@ namespace CourseManager
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
       });
+      ConfigSpa(app, env);
+    }
 
+    protected virtual void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+      app.UseStaticFiles();
+      app.UseSpaStaticFiles();
       app.UseSpa(spa =>
       {
         spa.Options.SourcePath = "ClientApp";

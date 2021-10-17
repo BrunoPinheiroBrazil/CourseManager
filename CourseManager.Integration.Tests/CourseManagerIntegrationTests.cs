@@ -1,29 +1,35 @@
 using CourseManager.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CourseManager.Integration.Tests
 {
-  public class CourseManagerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class CourseManagerIntegrationTests : IClassFixture<CustomWebApplicationFactory<TestStartup>>
   {
-    private readonly CustomWebApplicationFactory<Startup> _factory;
+    private readonly CustomWebApplicationFactory<TestStartup> _factory;
     private HttpClient _client;
 
-    public CourseManagerIntegrationTests(CustomWebApplicationFactory<Startup> factory)
+    public CourseManagerIntegrationTests(CustomWebApplicationFactory<TestStartup> factory)
     {
       _factory = factory;
-      _client = _factory.CreateClient();
+      _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+      {
+        AllowAutoRedirect = false
+      });
     }
 
     [Fact(DisplayName = "Insert Student [Success]")]
     public async Task Insert_Student_Success()
     {
       //Arrange
-      var url = "create/client";
+      var url = "coursemanager/create/student";
       var studentDto = new StudentDto
       {
         FirstName = "Jovem",
@@ -37,17 +43,13 @@ namespace CourseManager.Integration.Tests
 
       var studentDtoJson = JToken.FromObject(studentDto).ToString();
 
-      var httpMessage = new HttpRequestMessage
-      {
-        Content = new StringContent(studentDtoJson)
-      };
+      var httpMessageContent = new StringContent(studentDtoJson, Encoding.UTF8, "application/json");
 
       //Act
-      var response = await _client.PostAsync(url, httpMessage.Content);
+      var response = await _client.PostAsync(url, httpMessageContent);
 
       //Assert
-      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
+      Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
   }
 }

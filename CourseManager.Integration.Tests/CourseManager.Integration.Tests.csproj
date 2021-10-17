@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CourseManager.Models\CourseManager.Models.csproj" />
     <ProjectReference Include="..\CourseManager\CourseManager.csproj" />
   </ItemGroup>
 
