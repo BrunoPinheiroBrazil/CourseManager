@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CourseManager.Models
+namespace CourseManager.Models.Dtos
 {
   public class StudentDto
   {

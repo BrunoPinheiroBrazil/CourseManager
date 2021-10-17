@@ -1,10 +1,9 @@
-using CourseManager.Models;
+using CourseManager.Models.Dtos;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;

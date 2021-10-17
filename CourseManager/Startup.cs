@@ -22,6 +22,7 @@ namespace CourseManager
       services.AddControllersWithViews().AddNewtonsoftJson();
       services.AddMvc().AddApplicationPart(typeof(Startup).Assembly);
       AddSpaServices(services);
+      services.AddDependencyServices();
     }
 
     protected virtual void AddSpaServices(IServiceCollection services)

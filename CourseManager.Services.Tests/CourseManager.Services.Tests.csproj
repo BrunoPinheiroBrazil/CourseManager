@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CourseManager.Common.Tests\CourseManager.Common.Tests.csproj" />
-    <ProjectReference Include="..\CourseManager.Models\CourseManager.Models.csproj" />
-    <ProjectReference Include="..\CourseManager\CourseManager.csproj" />
+    <ProjectReference Include="..\CourseManager.DataBase.SqlServer\CourseManager.DataBase.SqlServer.csproj" />
+    <ProjectReference Include="..\CourseManagerServices\CourseManagerServices.csproj" />
   </ItemGroup>
 
 </Project>

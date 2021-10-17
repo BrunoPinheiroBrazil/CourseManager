@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CourseManager.DataBase.SqlServer\CourseManager.DataBase.SqlServer.csproj" />
+    <ProjectReference Include="..\CourseManager.Models\CourseManager.Models.csproj" />
+  </ItemGroup>
+
+</Project>

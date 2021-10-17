@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CourseManager.Models\CourseManager.Models.csproj" />
+    <ProjectReference Include="..\CourseManagerServices\CourseManagerServices.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
