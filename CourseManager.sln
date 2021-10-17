@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Tests", "Cour
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Models", "CourseManager.Models\CourseManager.Models.csproj", "{9ECA0B23-09F0-4108-B408-10AF9DA6C0A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Integration.Tests", "CourseManager.Integration.Tests\CourseManager.Integration.Tests.csproj", "{6264824E-8E50-4A86-9795-68A995407304}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9ECA0B23-09F0-4108-B408-10AF9DA6C0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ECA0B23-09F0-4108-B408-10AF9DA6C0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ECA0B23-09F0-4108-B408-10AF9DA6C0A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6264824E-8E50-4A86-9795-68A995407304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6264824E-8E50-4A86-9795-68A995407304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6264824E-8E50-4A86-9795-68A995407304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6264824E-8E50-4A86-9795-68A995407304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
