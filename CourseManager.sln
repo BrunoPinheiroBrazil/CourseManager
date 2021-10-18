@@ -11,17 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Models", "Cou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Integration.Tests", "CourseManager.Integration.Tests\CourseManager.Integration.Tests.csproj", "{6264824E-8E50-4A86-9795-68A995407304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagerServices", "CourseManagerServices\CourseManagerServices.csproj", "{8CB58325-82E0-4FF5-8C6F-22C86E0E4FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagerServices", "CourseManagerServices\CourseManagerServices.csproj", "{8CB58325-82E0-4FF5-8C6F-22C86E0E4FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Services.Tests", "CourseManager.Services.Tests\CourseManager.Services.Tests.csproj", "{14CF8A2E-A2F0-480A-83CF-96BCB0B7B612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Services.Tests", "CourseManager.Services.Tests\CourseManager.Services.Tests.csproj", "{14CF8A2E-A2F0-480A-83CF-96BCB0B7B612}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{ACC7DE82-69B2-48B8-9E18-4B46DE5D15C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Common.Tests", "CourseManager.Common.Tests\CourseManager.Common.Tests.csproj", "{EAC6CB11-BFAE-4850-A108-48751E932576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Common.Tests", "CourseManager.Common.Tests\CourseManager.Common.Tests.csproj", "{EAC6CB11-BFAE-4850-A108-48751E932576}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.DataBase.SqlServer", "CourseManager.DataBase.SqlServer\CourseManager.DataBase.SqlServer.csproj", "{C4F7578F-B3BD-4DB2-8350-DFD9A5071D0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.DataBase.SqlServer", "CourseManager.DataBase.SqlServer\CourseManager.DataBase.SqlServer.csproj", "{C4F7578F-B3BD-4DB2-8350-DFD9A5071D0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.Models.Tests", "CourseManager.Models.Tests\CourseManager.Models.Tests.csproj", "{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Models.Tests", "CourseManager.Models.Tests\CourseManager.Models.Tests.csproj", "{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.DataStore.SqlServer.Tests", "CourseManager.DataStore.SqlServer.Tests\CourseManager.DataStore.SqlServer.Tests.csproj", "{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{14CF8A2E-A2F0-480A-83CF-96BCB0B7B612} = {ACC7DE82-69B2-48B8-9E18-4B46DE5D15C4}
 		{EAC6CB11-BFAE-4850-A108-48751E932576} = {ACC7DE82-69B2-48B8-9E18-4B46DE5D15C4}
 		{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0} = {ACC7DE82-69B2-48B8-9E18-4B46DE5D15C4}
+		{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A} = {ACC7DE82-69B2-48B8-9E18-4B46DE5D15C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49D4AEB3-B626-4D38-975B-3849EE6E163F}
