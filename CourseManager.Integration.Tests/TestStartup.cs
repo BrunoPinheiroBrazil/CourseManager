@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CourseManager.DataBase.SqlServer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CourseManager.Integration.Tests
 {
@@ -13,6 +16,16 @@ namespace CourseManager.Integration.Tests
     {
       Configuration = configuration;
     }
+    protected override void ConfigureDb(IServiceCollection services)
+    {
+      var controllersAssemblyType = typeof(Startup).GetTypeInfo().Assembly;
+      services.AddMvc().AddApplicationPart(controllersAssemblyType);
+
+      var serviceProvider = services.BuildServiceProvider();
+      var options = serviceProvider.GetService<DbContextOptions<CourseManagerDbContext>>();
+      services.AddScoped(s => new FakeDbContext(options));
+    }
+
     protected override void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env) {}
     protected override void AddSpaServices(IServiceCollection services){}
   }

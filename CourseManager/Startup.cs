@@ -1,9 +1,12 @@
+using CourseManager.DataBase.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CourseManager
 {
@@ -23,6 +26,14 @@ namespace CourseManager
       services.AddMvc().AddApplicationPart(typeof(Startup).Assembly);
       AddSpaServices(services);
       services.AddDependencyServices();
+      ConfigureDb(services);
+    }
+
+    protected virtual void ConfigureDb(IServiceCollection services)
+    {
+      var serviceProvider = services.BuildServiceProvider();
+      var options = serviceProvider.GetService<DbContextOptions<CourseManagerDbContext>>();
+      services.AddScoped(s => new CourseManagerDbContext(options));
     }
 
     protected virtual void AddSpaServices(IServiceCollection services)

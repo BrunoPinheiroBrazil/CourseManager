@@ -28,14 +28,14 @@ namespace CourseManagerServicesTests
       var studentDto = CommonTestsFactory.CreateStudentDto("M", 4);
       var student = CommonTestsFactory.CreateStudent(null, 0, studentDto);
 
-      _translator.Setup(t => t.ToStudentTranslator(studentDto)).ReturnsAsync(student);
+      _translator.Setup(t => t.ToStudentTranslator(studentDto, null)).ReturnsAsync(student);
 
       //Act
       var successfull = await _services.InsertStudentAsync(studentDto);
 
       //Assert
       Assert.True(successfull);
-      _translator.Verify(t => t.ToStudentTranslator(studentDto), Times.Once, "ToStudentTranslator should be called once");
+      _translator.Verify(t => t.ToStudentTranslator(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
       _commands.Verify(c => c.SaveChangesAsync(), Times.Once, "SaveChangesAsync should be called once");
     }
   }
