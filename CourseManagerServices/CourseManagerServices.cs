@@ -22,7 +22,7 @@ namespace CourseManagerServices
 
     public async Task<bool> InsertCourseAsync(CourseDto courseDto)
     {
-      var course = await _toEntityTranslator.ToCourseTranslator(courseDto);
+      var course = await _toEntityTranslator.ToCourse(courseDto);
 
       await _commands.AddCourseAsync(course);
       return true;
@@ -30,7 +30,7 @@ namespace CourseManagerServices
 
     public async Task<bool> InsertStudentAsync(StudentDto studentDto)
     {
-      var student = await _toEntityTranslator.ToStudentTranslator(studentDto);
+      var student = await _toEntityTranslator.ToStudent(studentDto);
 
       await _commands.AddStudentAsync(student);
       return true;

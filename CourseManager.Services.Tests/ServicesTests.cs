@@ -28,14 +28,14 @@ namespace CourseManagerServicesTests
       var studentDto = CommonTestsFactory.CreateStudentDto("M", 4);
       var student = CommonTestsFactory.CreateStudent(null, 0, studentDto);
 
-      _translator.Setup(t => t.ToStudentTranslator(studentDto, null)).ReturnsAsync(student);
+      _translator.Setup(t => t.ToStudent(studentDto, null)).ReturnsAsync(student);
 
       //Act
       var successfull = await _services.InsertStudentAsync(studentDto);
 
       //Assert
       Assert.True(successfull);
-      _translator.Verify(t => t.ToStudentTranslator(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
+      _translator.Verify(t => t.ToStudent(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
       _commands.Verify(c => c.AddStudentAsync(student), Times.Once, "AddStudentAsync should be called once");
     }
 
@@ -46,14 +46,14 @@ namespace CourseManagerServicesTests
       var courseDto = CommonTestsFactory.CreateCourseDto();
       var course = CommonTestsFactory.CreateCourse(courseDto);
 
-      _translator.Setup(t => t.ToCourseTranslator(courseDto, null)).ReturnsAsync(course);
+      _translator.Setup(t => t.ToCourse(courseDto, null)).ReturnsAsync(course);
 
       //Act
       var successfull = await _services.InsertCourseAsync(courseDto);
 
       //Assert
       Assert.True(successfull);
-      _translator.Verify(t => t.ToCourseTranslator(courseDto, null), Times.Once, "ToCourseTranslator should be called once");
+      _translator.Verify(t => t.ToCourse(courseDto, null), Times.Once, "ToCourseTranslator should be called once");
       _commands.Verify(c => c.AddCourseAsync(course), Times.Once, "AddCourseAsync should be called once");
     }
   }

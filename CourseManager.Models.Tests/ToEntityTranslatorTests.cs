@@ -21,7 +21,7 @@ namespace CourseManager.Models.Tests
       var studentDto = CommonTestsFactory.CreateStudentDto("M", 5);
 
       //Act
-      var student = await _translator.ToStudentTranslator(studentDto);
+      var student = await _translator.ToStudent(studentDto);
 
       //Assert
       Assert.Equal(studentDto.FirstName, student.FirstName);
@@ -40,7 +40,7 @@ namespace CourseManager.Models.Tests
       var courseDto = CommonTestsFactory.CreateCourseDto();
 
       //Act
-      var course = await _translator.ToCourseTranslator(courseDto);
+      var course = await _translator.ToCourse(courseDto);
 
       //Assert
       Assert.Equal(courseDto.CourseCode, course.CourseCode);

@@ -6,12 +6,12 @@ namespace CourseManager.Models.Translators
 {
   public interface IToEntityTranslator
   {
-    Task<Student> ToStudentTranslator(StudentDto studentDto, Student student = null);
-    Task<Course> ToCourseTranslator(CourseDto courseDto, Course course = null);
+    Task<Student> ToStudent(StudentDto studentDto, Student student = null);
+    Task<Course> ToCourse(CourseDto courseDto, Course course = null);
   }
   public class ToEntityTranslator : IToEntityTranslator
   {
-    public async Task<Course> ToCourseTranslator(CourseDto courseDto, Course course = null)
+    public async Task<Course> ToCourse(CourseDto courseDto, Course course = null)
     {
       if (course == null)
         return await Task.FromResult(new Course
@@ -32,7 +32,7 @@ namespace CourseManager.Models.Translators
       return await Task.FromResult(course);
     }
 
-    public async Task<Student> ToStudentTranslator(StudentDto studentDto, Student student = null)
+    public async Task<Student> ToStudent(StudentDto studentDto, Student student = null)
     {
       if (student == null)
         return await Task.FromResult(new Student
