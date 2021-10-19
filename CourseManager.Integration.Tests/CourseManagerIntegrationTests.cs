@@ -11,18 +11,21 @@ using Xunit;
 
 namespace CourseManager.Integration.Tests
 {
-  public class CourseManagerIntegrationTests : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+  public class CourseManagerIntegrationTests : IClassFixture<CourseManagerFixture>
   {
     private readonly CustomWebApplicationFactory<TestStartup> _factory;
+    private readonly CourseManagerFixture _fixture;
     private HttpClient _client;
 
-    public CourseManagerIntegrationTests(CustomWebApplicationFactory<TestStartup> factory)
+    public CourseManagerIntegrationTests(CustomWebApplicationFactory<TestStartup> factory, CourseManagerFixture fixture)
     {
       _factory = factory;
       _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
       {
         AllowAutoRedirect = false
       });
+
+      _fixture = fixture;
     }
 
     #region Student
@@ -60,6 +63,20 @@ namespace CourseManager.Integration.Tests
 
       //Assert
       Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
+
+    [Fact(DisplayName = "Get Student [Success]")]
+    public async Task Get_Student_Success()
+    {
+      //Arrange
+      var studentId = 1;
+      var url = $"coursemanager/student/{studentId}";
+
+      //Act
+      var (responseObject, StatusCode) = await _fixture.GetInApi<StudentDto>(url);
+
+      //Assert
+
     }
 
     [Fact(DisplayName = "Update Student [Failure] - Student does not exists")]

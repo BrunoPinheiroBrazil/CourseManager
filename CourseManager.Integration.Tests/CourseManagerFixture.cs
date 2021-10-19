@@ -6,8 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CourseManager.Integration.Tests
 {
@@ -64,6 +68,25 @@ namespace CourseManager.Integration.Tests
   }
   public class CourseManagerFixture
   {
+    private readonly CustomWebApplicationFactory<TestStartup> _factory;
+    public HttpClient _client;
 
+    public CourseManagerFixture(CustomWebApplicationFactory<TestStartup> factory)
+    {
+      _factory = factory;
+      _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+      {
+        AllowAutoRedirect = false
+      });
+    }
+
+    public async Task<(T ResponseObject, HttpStatusCode StatusCode)> GetInApi<T>(string url)
+    {
+      var response = await _client.GetAsync(url);
+      var responseContent = await response.Content.ReadAsStringAsync();
+      var dto = JToken.Parse(responseContent).ToObject<T>();
+
+      return (dto, response.StatusCode);
+    }
   }
 }
