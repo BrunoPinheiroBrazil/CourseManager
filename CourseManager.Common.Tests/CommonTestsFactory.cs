@@ -1,4 +1,5 @@
-﻿using CourseManager.Models.Dtos;
+﻿using CourseManager.DataBase.SqlServer;
+using CourseManager.Models.Dtos;
 using CourseManager.Models.Entities;
 using System;
 using System.Linq;
@@ -63,6 +64,14 @@ namespace CourseManager.Common.Tests
         Gender = gender,
         Dob = DateTime.Now.AddYears(-30)
       };
+    }
+
+    public static Student CreateStudentAndSeedDb(string gender, int randomLength, CourseManagerDbContext context, StudentDto studentDto = null)
+    {
+      var student = CreateStudent(gender, randomLength, studentDto);
+      context.Add(student);
+
+      return student;
     }
 
     public static Course CreateCourse(CourseDto courseDto = null)

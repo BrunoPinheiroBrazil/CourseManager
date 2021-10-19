@@ -1,4 +1,5 @@
-﻿using CourseManager.DataBase.SqlServer;
+﻿using CourseManager.Common.Tests;
+using CourseManager.DataBase.SqlServer;
 using CourseManager.Models.Entities;
 using System.Collections.Generic;
 
@@ -9,23 +10,36 @@ namespace CourseManager.Integration.Tests
     public static void InitializeDbForTests(CourseManagerDbContext db)
     {
       db.Students.AddRange(GetStudentsList());
+      db.Courses.AddRange(GetCoursesList());
       db.SaveChanges();
     }
 
     public static void ReinitializeDbForTests(CourseManagerDbContext db)
     {
       db.Students.RemoveRange(db.Students);
+      db.Courses.RemoveRange(db.Courses);
       InitializeDbForTests(db);
     }
 
     public static List<Student> GetStudentsList()
     {
       return new List<Student>()
+      {
+          CommonTestsFactory.CreateStudent("M", 4),
+          CommonTestsFactory.CreateStudent("F", 4),
+          CommonTestsFactory.CreateStudent("M", 4),
+          CommonTestsFactory.CreateStudent("F", 4)
+      };
+    }
+    public static List<Course> GetCoursesList()
     {
-        new Student(){ FirstName = "Mr Rock and Roll" },
-        new Student(){ FirstName = "Mrs Lady Gaga" },
-        new Student(){ FirstName = "Mr Anderson" }
-    };
+      return new List<Course>()
+      {
+          CommonTestsFactory.CreateCourse(),
+          CommonTestsFactory.CreateCourse(),
+          CommonTestsFactory.CreateCourse(),
+          CommonTestsFactory.CreateCourse()
+      };
     }
   }
 }

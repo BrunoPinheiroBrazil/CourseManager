@@ -1,49 +1,61 @@
-using CourseManager.Common.Tests;
+﻿using CourseManager.Common.Tests;
 using CourseManager.DataBase.SqlServer.DataAccess;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CourseManager.DataStore.SqlServer.Tests
 {
-  public class CommandsTests : IClassFixture<CourseManagerContextFixture>
+  public class QueriesTests : IClassFixture<CourseManagerContextFixture>
   {
     private readonly CourseManagerContextFixture _fixture;
-    private readonly ICommands _commands;
+    private readonly IQueries _queries;
 
-    public CommandsTests()
+    public QueriesTests()
     {
       _fixture = new CourseManagerContextFixture();
-      _commands = new Commands(_fixture.Context);
+      _queries = new Queries(_fixture.Context);
     }
 
-    [Fact(DisplayName = "AddStudentAsync [Success]")]
-    public async Task AddStudentAsync_Success()
+    [Fact(DisplayName = "GetStudent [Success]")]
+    public async Task GetStudent_Success()
     {
       //Arrange
       var student = CommonTestsFactory.CreateStudent("M", 4);
 
+      await _fixture.Context.AddAsync(student);
+      await _fixture.Context.SaveChangesAsync();
+
+      var studentId = student.StudentId;
+
       //Act
-      await _commands.AddStudentAsync(student);
+      var currentStudent = await _queries.GetStudent(studentId);
 
       //Assert
-      var currentStudent = _fixture.Context.Students.FirstOrDefault(s => s.FirstName == student.FirstName);
       Assert.NotNull(currentStudent);
+      Assert.Equal(student.FirstName, currentStudent.FirstName);
+      Assert.Equal(student.SurName, currentStudent.SurName);
+      Assert.Equal(student.Gender, currentStudent.Gender);
       Assert.Equal(student.Address1, currentStudent.Address1);
       Assert.Equal(student.Address2, currentStudent.Address2);
       Assert.Equal(student.Address3, currentStudent.Address3);
+      Assert.Equal(student.Dob, currentStudent.Dob);
     }
-    [Fact(DisplayName = "AddCourseAsync [Success]")]
-    public async Task AddCourseAsync_Success()
+
+    [Fact(DisplayName = "GetCourse [Success]")]
+    public async Task GetCourse_Success()
     {
       //Arrange
       var course = CommonTestsFactory.CreateCourse();
 
+      await _fixture.Context.AddAsync(course);
+      await _fixture.Context.SaveChangesAsync();
+
+      var courseId = course.CourseId;
+
       //Act
-      await _commands.AddCourseAsync(course);
+      var currentCourse = await _queries.GetCourse(courseId);
 
       //Assert
-      var currentCourse = _fixture.Context.Courses.FirstOrDefault(c => c.CourseCode == course.CourseCode);
       Assert.NotNull(currentCourse);
       Assert.Equal(course.CourseCode, currentCourse.CourseCode);
       Assert.Equal(course.CourseName, currentCourse.CourseName);

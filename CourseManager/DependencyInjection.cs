@@ -11,6 +11,7 @@ namespace CourseManager
     {
       services.AddScoped<IServices, Services>();
       services.AddScoped<ICommands, Commands>();
+      services.AddTransient<IQueries, Queries>();
       services.AddScoped<IToEntityTranslator, ToEntityTranslator>();
     }
   }

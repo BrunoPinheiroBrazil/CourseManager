@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CourseManager.Common.Tests\CourseManager.Common.Tests.csproj" />
     <ProjectReference Include="..\CourseManager\CourseManager.csproj" />
   </ItemGroup>
 

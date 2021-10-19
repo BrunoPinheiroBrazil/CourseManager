@@ -19,18 +19,28 @@ namespace CourseManager.Controllers
     [HttpPost("create/student")]
     public async Task<IActionResult> InsertStudent([FromBody] StudentDto studentDto)
     {
-      if (await _services.InsertStudentAsync(studentDto))
-        return await Task.FromResult(NoContent());
+      return Ok(await _services.InsertStudentAsync(studentDto));
+    }
 
-      throw new Exception("An error ocurred during the creation of the student!");
+    [HttpPut("update/student/{studentId}")]
+    public async Task<IActionResult> UpdateStudent(long studentId, [FromBody] StudentDto studentDto)
+    {
+      await _services.UpdateStudentAsync(studentId, studentDto);
+      return NoContent();
     }
 
     [HttpPost("create/course")]
     public async Task<IActionResult> InsertCourse([FromBody] CourseDto courseDto)
     {
-      if (await _services.InsertCourseAsync(courseDto))
-        return NoContent();
-      throw new Exception("An error ocurred during the creation of the course!");
+      return Ok(await _services.InsertCourseAsync(courseDto));
     }
+
+    [HttpPut("update/course/{courseId}")]
+    public async Task<IActionResult> UpdateCourse(long courseId, [FromBody] CourseDto courseDto)
+    {
+      await _services.UpdateCourseAsync(courseId, courseDto);
+      return NoContent();
+    }
+
   }
 }

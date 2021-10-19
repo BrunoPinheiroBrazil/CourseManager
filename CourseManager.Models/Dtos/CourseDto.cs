@@ -8,6 +8,7 @@ namespace CourseManager.Models.Dtos
 {
   public class CourseDto
   {
+    public string CourseId { get; set; }
     public string CourseCode { get; set; }
     public string CourseName { get; set; }
     public string TeacherName { get; set; }

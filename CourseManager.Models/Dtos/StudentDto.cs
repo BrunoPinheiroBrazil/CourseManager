@@ -4,6 +4,7 @@ namespace CourseManager.Models.Dtos
 {
   public class StudentDto
   {
+    public long StudentId { get; set; }
     public string FirstName { get; set; }
     public string SurName { get; set; }
     public string Gender { get; set; }
