@@ -85,6 +85,24 @@ namespace CourseManagerServicesTests
       _toEntityTranslator.Verify(t => t.ToStudent(studentDto, currentStudent), Times.Once, "ToStudentTranslator should be called once");
       _commands.Verify(c => c.SaveChangesAsync(), Times.Once, "SaveChangesAsync should be called once");
     }
+
+    [Fact(DisplayName = "DeleteStudent [Success]")]
+    public async Task DeleteStudent_Success()
+    {
+      //Arrange
+      var studentId = 777L;
+      var studentDto = CommonTestsFactory.CreateStudentDto("M", 4);
+      var currentStudent = CommonTestsFactory.CreateStudent("M", 4);
+
+      _queries.Setup(q => q.GetStudent(studentId)).ReturnsAsync(currentStudent);
+
+      //Act
+      await _services.DeleteStudentAsync(studentId);
+
+      //Assert
+      _queries.Verify(q => q.GetStudent(studentId), Times.Once, "GetStudent should be called once");
+      _commands.Verify(c => c.RemoveStudentAsync(currentStudent), Times.Once, "RemoveStudentAsync should be called once");
+    }
     #endregion
 
     #region Course

@@ -47,5 +47,12 @@ namespace CourseManager.Controllers
     {
       return Ok(await _services.GetStudent(studentId));
     }
+
+    [HttpDelete("delete/student/{studentId}")]
+    public async Task<IActionResult> DeleteStudent(long studentId)
+    {
+      await _services.DeleteStudentAsync(studentId);
+      return NoContent();
+    }
   }
 }

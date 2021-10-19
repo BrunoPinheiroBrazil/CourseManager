@@ -13,6 +13,7 @@ namespace CourseManagerServices
     Task UpdateStudentAsync(long studentId, StudentDto studentDto);
     Task UpdateCourseAsync(long courseId, CourseDto courseDto);
     Task<StudentDto> GetStudent(long studentId);
+    Task DeleteStudentAsync(long studentId);
   }
   public class Services : IServices
   {
@@ -69,6 +70,10 @@ namespace CourseManagerServices
       await _commands.SaveChangesAsync();
     }
 
-
+    public async Task DeleteStudentAsync(long studentId)
+    {
+      var student = await _queries.GetStudent(studentId);
+      await _commands.RemoveStudentAsync(student);
+    }
   }
 }

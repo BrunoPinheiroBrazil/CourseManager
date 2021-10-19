@@ -33,6 +33,23 @@ namespace CourseManager.DataStore.SqlServer.Tests
       Assert.Equal(student.Address2, currentStudent.Address2);
       Assert.Equal(student.Address3, currentStudent.Address3);
     }
+
+    [Fact(DisplayName = "RemoveStudentAsync [Success]")]
+    public async Task RemnoveStudentAsync_Success()
+    {
+      //Arrange
+      var student = CommonTestsFactory.CreateStudent("M", 4);
+      await _fixture.Context.AddAsync(student);
+      await _fixture.Context.SaveChangesAsync();
+
+      //Act
+      await _commands.RemoveStudentAsync(student);
+
+      //Assert
+      var currentStudent = _fixture.Context.Students.FirstOrDefault(s => s.FirstName == student.FirstName);
+      Assert.Null(currentStudent);
+    }
+
     [Fact(DisplayName = "AddCourseAsync [Success]")]
     public async Task AddCourseAsync_Success()
     {

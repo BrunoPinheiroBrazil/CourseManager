@@ -127,6 +127,12 @@ namespace CourseManager.Integration.Tests
       return response.StatusCode;
     }
 
+    public async Task<HttpStatusCode> DeleteInApi(string url)
+    {
+      var response = await _client.DeleteAsync(url);
+      return response.StatusCode;
+    }
+
 
     public StringContent CreateHttpJsonBody(string jsonContent)
     {

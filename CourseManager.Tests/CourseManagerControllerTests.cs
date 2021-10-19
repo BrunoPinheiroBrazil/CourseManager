@@ -75,6 +75,21 @@ namespace CourseManager.Tests
       Assert.Equal(204, responseStatus.StatusCode);
       _services.Verify(s => s.UpdateStudentAsync(studentId, studentDto), Times.Once, "UpdateStudent should be called once");
     }
+
+    [Fact(DisplayName = "DeleteStudent [Success]")]
+    public async Task DeleteStudent_Success()
+    {
+      //Arrange
+      var studentId = 3L;
+
+      //Act
+      var response = await _controller.DeleteStudent(studentId);
+
+      //Assert
+      var responseStatus = Assert.IsType<NoContentResult>(response);
+      Assert.Equal(204, responseStatus.StatusCode);
+      _services.Verify(s => s.DeleteStudentAsync(studentId), Times.Once, "DeleteStudentAsync should be called once");
+    }
     #endregion
 
     #region Course

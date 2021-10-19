@@ -8,6 +8,7 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
     Task SaveChangesAsync();
     Task<long> AddStudentAsync(Student student);
     Task<long> AddCourseAsync(Course course);
+    Task RemoveStudentAsync(Student student);
   }
   public class Commands : ICommands
   {
@@ -30,6 +31,12 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
       await _context.AddAsync(student);
       await SaveChangesAsync();
       return student.StudentId;
+    }
+
+    public async Task RemoveStudentAsync(Student student)
+    {
+      _context.Remove(student);
+      await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()

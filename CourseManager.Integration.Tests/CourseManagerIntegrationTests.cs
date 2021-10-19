@@ -21,6 +21,21 @@ namespace CourseManager.Integration.Tests
     }
 
     #region Student
+    [Fact(DisplayName = "Get Student [Success]")]
+    public async Task Get_Student_Success()
+    {
+      //Arrange
+      var studentId = 1;
+      var url = $"coursemanager/student/{studentId}";
+
+      //Act
+      var (responseObject, StatusCode) = await _fixture.GetInApi<StudentDto>(url);
+
+      //Assert
+      Assert.Equal(HttpStatusCode.OK, StatusCode);
+      Assert.IsType<StudentDto>(responseObject);
+    }
+
     [Fact(DisplayName = "Insert Student [Success]")]
     public async Task Insert_Student_Success()
     {
@@ -53,21 +68,6 @@ namespace CourseManager.Integration.Tests
       Assert.Equal(HttpStatusCode.NoContent, statusCode);
     }
 
-    [Fact(DisplayName = "Get Student [Success]")]
-    public async Task Get_Student_Success()
-    {
-      //Arrange
-      var studentId = 1;
-      var url = $"coursemanager/student/{studentId}";
-
-      //Act
-      var (responseObject, StatusCode) = await _fixture.GetInApi<StudentDto>(url);
-
-      //Assert
-      Assert.Equal(HttpStatusCode.OK, StatusCode);
-      Assert.IsType<StudentDto>(responseObject);
-    }
-
     [Fact(DisplayName = "Update Student [Failure] - Student does not exists")]
     public async Task Update_Student_Failure_Student_Does_Not_Exists()
     {
@@ -81,6 +81,20 @@ namespace CourseManager.Integration.Tests
       //Act
       //Assert
       _ = await Assert.ThrowsAsync<Exception>(() => _fixture.PutInApi(url, studentDtoJson));
+    }
+
+    [Fact(DisplayName = "Delete Student [Success]")]
+    public async Task Delete_Student_Success()
+    {
+      //Arrange
+      var studentId = 3;
+      var url = $"coursemanager/delete/student/{studentId}";
+
+      //Act
+      var statusCode = await _fixture.DeleteInApi(url);
+
+      //Assert
+      Assert.Equal(HttpStatusCode.NoContent, statusCode);
     }
     #endregion
 
