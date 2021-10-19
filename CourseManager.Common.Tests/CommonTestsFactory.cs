@@ -1,5 +1,4 @@
-﻿using CourseManager.DataBase.SqlServer;
-using CourseManager.Models.Dtos;
+﻿using CourseManager.Models.Dtos;
 using CourseManager.Models.Entities;
 using System;
 using System.Linq;

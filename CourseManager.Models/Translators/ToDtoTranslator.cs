@@ -1,9 +1,5 @@
 ﻿using CourseManager.Models.Dtos;
 using CourseManager.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseManager.Models.Translators
@@ -16,6 +12,9 @@ namespace CourseManager.Models.Translators
   {
     public async Task<StudentDto> ToStudentDto(Student student)
     {
+      if (student == null)
+        return null;
+
       return await Task.FromResult(new StudentDto
       {
         FirstName = student.FirstName,

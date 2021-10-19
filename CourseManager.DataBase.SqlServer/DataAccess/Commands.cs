@@ -1,5 +1,4 @@
 ﻿using CourseManager.Models.Entities;
-using System;
 using System.Threading.Tasks;
 
 namespace CourseManager.DataBase.SqlServer.DataAccess
