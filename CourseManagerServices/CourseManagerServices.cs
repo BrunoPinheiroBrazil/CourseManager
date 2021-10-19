@@ -12,17 +12,28 @@ namespace CourseManagerServices
     Task<long> InsertCourseAsync(CourseDto courseDto);
     Task UpdateStudentAsync(long studentId, StudentDto studentDto);
     Task UpdateCourseAsync(long courseId, CourseDto courseDto);
+    Task<StudentDto> GetStudent(long studentId);
   }
   public class Services : IServices
   {
     private readonly IToEntityTranslator _toEntityTranslator;
+    private readonly IToDtoTranslator _toDtoTranslator;
     private readonly IQueries _queries;
     private readonly ICommands _commands;
-    public Services(IToEntityTranslator translator, ICommands commands, IQueries queries)
+    public Services(IToEntityTranslator toEntityTranslator,IToDtoTranslator toDtoTranslator , ICommands commands, IQueries queries)
     {
-      _toEntityTranslator = translator;
+      _toEntityTranslator = toEntityTranslator;
+      _toDtoTranslator = toDtoTranslator;
       _queries = queries;
       _commands = commands;
+    }
+
+    public async Task<StudentDto> GetStudent(long studentId)
+    {
+      var student = await _queries.GetStudent(studentId);
+      var studentDto = await _toDtoTranslator.ToStudentDto(student);
+
+      return studentDto;
     }
 
     public async Task<long> InsertCourseAsync(CourseDto courseDto)
@@ -31,14 +42,6 @@ namespace CourseManagerServices
 
       return await _commands.AddCourseAsync(course);
     }
-
-    public async Task<long> InsertStudentAsync(StudentDto studentDto)
-    {
-      var student = await _toEntityTranslator.ToStudent(studentDto);
-
-      return await _commands.AddStudentAsync(student);
-    }
-
     public async Task UpdateCourseAsync(long courseId, CourseDto courseDto)
     {
       var course = await _queries.GetCourse(courseId);
@@ -49,7 +52,12 @@ namespace CourseManagerServices
       await _toEntityTranslator.ToCourse(courseDto, course);
       await _commands.SaveChangesAsync();
     }
+    public async Task<long> InsertStudentAsync(StudentDto studentDto)
+    {
+      var student = await _toEntityTranslator.ToStudent(studentDto);
 
+      return await _commands.AddStudentAsync(student);
+    }
     public async Task UpdateStudentAsync(long studentId, StudentDto studentDto)
     {
       var student = await _queries.GetStudent(studentId);
@@ -60,5 +68,7 @@ namespace CourseManagerServices
       await _toEntityTranslator.ToStudent(studentDto, student);
       await _commands.SaveChangesAsync();
     }
+
+
   }
 }

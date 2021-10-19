@@ -1,6 +1,5 @@
 using CourseManager.Common.Tests;
 using CourseManager.Models.Translators;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,7 +13,7 @@ namespace CourseManager.Models.Tests
       _translator = new ToEntityTranslator();
     }
 
-    [Fact(DisplayName ="ToStudent [Success]")]
+    [Fact(DisplayName = "ToStudent [Success]")]
     public async Task ToStudent_Success()
     {
       //Arrange
@@ -24,13 +23,7 @@ namespace CourseManager.Models.Tests
       var student = await _translator.ToStudent(studentDto);
 
       //Assert
-      Assert.Equal(studentDto.FirstName, student.FirstName);
-      Assert.Equal(studentDto.SurName, student.SurName);
-      Assert.Equal(studentDto.Dob, student.Dob);
-      Assert.Equal(studentDto.Gender, student.Gender);
-      Assert.Equal(studentDto.Address1, student.Address1);
-      Assert.Equal(studentDto.Address2, student.Address2);
-      Assert.Equal(studentDto.Address3, student.Address3);
+      await EntityAsserts.AssertStudentAsync(studentDto, student);
     }
 
     [Fact(DisplayName = "ToCourse [Success]")]
@@ -43,11 +36,7 @@ namespace CourseManager.Models.Tests
       var course = await _translator.ToCourse(courseDto);
 
       //Assert
-      Assert.Equal(courseDto.CourseCode, course.CourseCode);
-      Assert.Equal(courseDto.CourseName, course.CourseName);
-      Assert.Equal(courseDto.TeacherName, course.TeacherName);
-      Assert.Equal(courseDto.StartDate, course.StartDate);
-      Assert.Equal(courseDto.EndDate, course.EndDate);
+      await EntityAsserts.AssertCoursesAsync(courseDto, course);
     }
   }
 }

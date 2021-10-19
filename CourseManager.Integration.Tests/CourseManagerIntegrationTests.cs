@@ -13,18 +13,10 @@ namespace CourseManager.Integration.Tests
 {
   public class CourseManagerIntegrationTests : IClassFixture<CourseManagerFixture>
   {
-    private readonly CustomWebApplicationFactory<TestStartup> _factory;
     private readonly CourseManagerFixture _fixture;
-    private HttpClient _client;
 
-    public CourseManagerIntegrationTests(CustomWebApplicationFactory<TestStartup> factory, CourseManagerFixture fixture)
+    public CourseManagerIntegrationTests(CourseManagerFixture fixture)
     {
-      _factory = factory;
-      _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-      {
-        AllowAutoRedirect = false
-      });
-
       _fixture = fixture;
     }
 
@@ -38,13 +30,11 @@ namespace CourseManager.Integration.Tests
 
       var studentDtoJson = JToken.FromObject(studentDto).ToString();
 
-      var httpMessageContent = new StringContent(studentDtoJson, Encoding.UTF8, "application/json");
-
       //Act
-      var response = await _client.PostAsync(url, httpMessageContent);
+      var statusCode = await _fixture.PostInApi(url, studentDtoJson);
 
       //Assert
-      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+      Assert.Equal((int) HttpStatusCode.OK, statusCode);
     }
 
     [Fact(DisplayName = "Update Student [Success]")]
@@ -56,13 +46,11 @@ namespace CourseManager.Integration.Tests
       var studentDto = CommonTestsFactory.CreateStudentDto("F", 4);
       var studentDtoJson = JToken.FromObject(studentDto).ToString();
 
-      var httpMessageContent = new StringContent(studentDtoJson, Encoding.UTF8, "application/json");
-
       //Act
-      var response = await _client.PutAsync(url, httpMessageContent);
+      var statusCode = await _fixture.PutInApi(url, studentDtoJson);
 
       //Assert
-      Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+      Assert.Equal(HttpStatusCode.NoContent, statusCode);
     }
 
     [Fact(DisplayName = "Get Student [Success]")]
@@ -76,7 +64,8 @@ namespace CourseManager.Integration.Tests
       var (responseObject, StatusCode) = await _fixture.GetInApi<StudentDto>(url);
 
       //Assert
-
+      Assert.Equal(HttpStatusCode.OK, StatusCode);
+      Assert.IsType<StudentDto>(responseObject);
     }
 
     [Fact(DisplayName = "Update Student [Failure] - Student does not exists")]
@@ -89,11 +78,9 @@ namespace CourseManager.Integration.Tests
 
       var studentDtoJson = JToken.FromObject(studentDto).ToString();
 
-      var httpMessageContent = new StringContent(studentDtoJson, Encoding.UTF8, "application/json");
-
       //Act
       //Assert
-      _ = await Assert.ThrowsAsync<Exception>(() => _client.PutAsync(url, httpMessageContent));
+      _ = await Assert.ThrowsAsync<Exception>(() => _fixture.PutInApi(url, studentDtoJson));
     }
     #endregion
 
@@ -114,13 +101,11 @@ namespace CourseManager.Integration.Tests
 
       var courseDtoJson = JToken.FromObject(courseDto).ToString();
 
-      var httpMessageContent = new StringContent(courseDtoJson, Encoding.UTF8, "application/json");
-
       //Act
-      var response = await _client.PostAsync(url, httpMessageContent);
+      var statusCode = await _fixture.PostInApi(url, courseDtoJson);
 
       //Assert
-      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+      Assert.Equal((int) HttpStatusCode.OK, statusCode);
     }
 
     [Fact(DisplayName = "Update Course [Success]")]
@@ -132,13 +117,11 @@ namespace CourseManager.Integration.Tests
       var courseDto = CommonTestsFactory.CreateCourseDto();
       var courseDtoJson = JToken.FromObject(courseDto).ToString();
 
-      var httpMessageContent = new StringContent(courseDtoJson, Encoding.UTF8, "application/json");
-
       //Act
-      var response = await _client.PutAsync(url, httpMessageContent);
+      var statusCode = await _fixture.PutInApi(url, courseDtoJson);
 
       //Assert
-      Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+      Assert.Equal(HttpStatusCode.NoContent, statusCode);
     }
 
     [Fact(DisplayName = "Update Course [Failure] - Course does not exists")]
@@ -151,11 +134,9 @@ namespace CourseManager.Integration.Tests
 
       var courseDtoJson = JToken.FromObject(courseDto).ToString();
 
-      var httpMessageContent = new StringContent(courseDtoJson, Encoding.UTF8, "application/json");
-
       //Act
       //Assert
-      _ = await Assert.ThrowsAsync<Exception>(() => _client.PutAsync(url, httpMessageContent));
+      _ = await Assert.ThrowsAsync<Exception>(() => _fixture.PutInApi(url, courseDtoJson));
     }
     #endregion
   }

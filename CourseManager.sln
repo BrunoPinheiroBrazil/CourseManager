@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.DataBase.SqlS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.Models.Tests", "CourseManager.Models.Tests\CourseManager.Models.Tests.csproj", "{CFBCB9D2-2C5A-491E-BA96-254B5DF790E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManager.DataStore.SqlServer.Tests", "CourseManager.DataStore.SqlServer.Tests\CourseManager.DataStore.SqlServer.Tests.csproj", "{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManager.DataStore.SqlServer.Tests", "CourseManager.DataStore.SqlServer.Tests\CourseManager.DataStore.SqlServer.Tests.csproj", "{E3E75AC3-F461-4A0C-B5F4-B73AFA5AD82A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

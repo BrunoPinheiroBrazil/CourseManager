@@ -1,6 +1,8 @@
 using CourseManager.Common.Tests;
 using CourseManager.Controllers;
+using CourseManager.Models.Dtos;
 using CourseManagerServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Threading.Tasks;
@@ -17,6 +19,26 @@ namespace CourseManager.Tests
     {
       _services = new Mock<IServices>();
       _controller = new CourseManagerController(_services.Object);
+    }
+
+    #region Student
+    [Fact(DisplayName = "GetStudent [Success]")]
+    public async Task GetStudent_Success()
+    {
+      //Arrange
+      var studentId = 3120L;
+      var studentDto = CommonTestsFactory.CreateStudentDto("M", 4);
+
+      _services.Setup(s => s.GetStudent(studentId)).ReturnsAsync(studentDto);
+
+      //Act
+      var response = await _controller.GetStudent(studentId);
+
+      //Assert
+      var statusResult = Assert.IsType<OkObjectResult>(response);
+      Assert.Equal(StatusCodes.Status200OK, statusResult.StatusCode);
+      Assert.IsType<StudentDto>(statusResult.Value);
+      _services.Verify(s => s.GetStudent(studentId), Times.Once, "GetStudent should be called once.");
     }
 
     [Fact(DisplayName = "Add Student [Success]")]
@@ -53,7 +75,9 @@ namespace CourseManager.Tests
       Assert.Equal(204, responseStatus.StatusCode);
       _services.Verify(s => s.UpdateStudentAsync(studentId, studentDto), Times.Once, "UpdateStudent should be called once");
     }
+    #endregion
 
+    #region Course
     [Fact(DisplayName = "Add Course [Success]")]
     public async Task InsertCourse_Success()
     {
@@ -88,5 +112,6 @@ namespace CourseManager.Tests
       Assert.Equal(204, responseStatus.StatusCode);
       _services.Verify(s => s.UpdateCourseAsync(courseId, courseDto), Times.Once, "UpdateCourse should be called once");
     }
+    #endregion
   }
 }

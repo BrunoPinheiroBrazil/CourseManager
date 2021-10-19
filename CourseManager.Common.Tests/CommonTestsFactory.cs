@@ -10,8 +10,21 @@ namespace CourseManager.Common.Tests
   {
     private static Random random = new Random();
 
-    public static StudentDto CreateStudentDto(string gender, int randomLength)
+    public static StudentDto CreateStudentDto(string gender, int randomLength, Student student = null)
     {
+      if (student != null)
+        return new StudentDto
+        {
+          StudentId = student.StudentId,
+          FirstName = student.FirstName,
+          SurName = student.SurName,
+          Address1 = student.Address1,
+          Address2 = student.Address2,
+          Address3 = student.Address3,
+          Dob = student.Dob,
+          Gender = student.Gender
+        };
+
       var randomString = RandomString(randomLength);
       return new StudentDto
       {
@@ -64,14 +77,6 @@ namespace CourseManager.Common.Tests
         Gender = gender,
         Dob = DateTime.Now.AddYears(-30)
       };
-    }
-
-    public static Student CreateStudentAndSeedDb(string gender, int randomLength, CourseManagerDbContext context, StudentDto studentDto = null)
-    {
-      var student = CreateStudent(gender, randomLength, studentDto);
-      context.Add(student);
-
-      return student;
     }
 
     public static Course CreateCourse(CourseDto courseDto = null)

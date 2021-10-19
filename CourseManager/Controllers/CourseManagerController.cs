@@ -42,5 +42,10 @@ namespace CourseManager.Controllers
       return NoContent();
     }
 
+    [HttpGet("student/{studentId}")]
+    public async Task<IActionResult> GetStudent(long studentId)
+    {
+      return Ok(await _services.GetStudent(studentId));
+    }
   }
 }

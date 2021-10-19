@@ -21,7 +21,7 @@ namespace CourseManager.Integration.Tests
       InitializeDbForTests(db);
     }
 
-    public static List<Student> GetStudentsList()
+    private static List<Student> GetStudentsList()
     {
       return new List<Student>()
       {
@@ -31,7 +31,7 @@ namespace CourseManager.Integration.Tests
           CommonTestsFactory.CreateStudent("F", 4)
       };
     }
-    public static List<Course> GetCoursesList()
+    private static List<Course> GetCoursesList()
     {
       return new List<Course>()
       {

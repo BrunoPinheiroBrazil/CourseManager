@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseManager.Integration.Tests
@@ -71,9 +72,9 @@ namespace CourseManager.Integration.Tests
     private readonly CustomWebApplicationFactory<TestStartup> _factory;
     public HttpClient _client;
 
-    public CourseManagerFixture(CustomWebApplicationFactory<TestStartup> factory)
+    public CourseManagerFixture()
     {
-      _factory = factory;
+      _factory = new CustomWebApplicationFactory<TestStartup>();
       _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
       {
         AllowAutoRedirect = false
@@ -87,6 +88,49 @@ namespace CourseManager.Integration.Tests
       var dto = JToken.Parse(responseContent).ToObject<T>();
 
       return (dto, response.StatusCode);
+    }
+
+    public async Task<int> PostInApi(string url, string jsonBody, string source = null)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Post, url);
+      
+      if (!string.IsNullOrEmpty(source))
+        request.Headers.Add("source", source);
+
+      request.Content = CreateHttpJsonBody(jsonBody);
+      var response = await _client.SendAsync(request);
+      return (int)response.StatusCode;
+    }
+
+    public async Task<(T ResponseObject, HttpStatusCode StatusCode)> PostInApi<T>(string url, string jsonBody)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Post, url);
+
+      request.Content = CreateHttpJsonBody(jsonBody);
+      var response = await _client.SendAsync(request);
+      var responseContent = await response.Content.ReadAsStringAsync();
+      var dto = JToken.Parse(responseContent).ToObject<T>();
+
+      return (dto, response.StatusCode);
+    }
+
+    public async Task<HttpStatusCode> PutInApi(string url, string jsonBody, string source = null)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Put, url);
+      
+      if(!string.IsNullOrWhiteSpace(source))
+        request.Headers.Add("source", source);
+
+      request.Content = CreateHttpJsonBody(jsonBody);
+      var response = await _client.SendAsync(request);
+
+      return response.StatusCode;
+    }
+
+
+    public StringContent CreateHttpJsonBody(string jsonContent)
+    {
+      return new StringContent(jsonContent, Encoding.UTF8, "application/json");
     }
   }
 }

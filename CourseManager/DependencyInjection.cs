@@ -9,10 +9,11 @@ namespace CourseManager
   {
     public static void AddDependencyServices(this IServiceCollection services)
     {
+      services.AddScoped<IToEntityTranslator, ToEntityTranslator>();
+      services.AddScoped<IToDtoTranslator, ToDtoTranslator>();
       services.AddScoped<IServices, Services>();
       services.AddScoped<ICommands, Commands>();
       services.AddTransient<IQueries, Queries>();
-      services.AddScoped<IToEntityTranslator, ToEntityTranslator>();
     }
   }
 }

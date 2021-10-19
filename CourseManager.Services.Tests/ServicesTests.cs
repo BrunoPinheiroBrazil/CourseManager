@@ -13,14 +13,37 @@ namespace CourseManagerServicesTests
     private readonly Services _services;
     private readonly Mock<IQueries> _queries;
     private readonly Mock<ICommands> _commands;
-    private readonly Mock<IToEntityTranslator> _translator;
+    private readonly Mock<IToEntityTranslator> _toEntityTranslator;
+    private readonly Mock<IToDtoTranslator> _toDtoTranslator;
 
     public ServicesTests()
     {
-      _translator = new Mock<IToEntityTranslator>();
+      _toEntityTranslator = new Mock<IToEntityTranslator>();
+      _toDtoTranslator = new Mock<IToDtoTranslator>();
       _queries = new Mock<IQueries>();
       _commands = new Mock<ICommands>();
-      _services = new Services(_translator.Object, _commands.Object, _queries.Object);
+      _services = new Services(_toEntityTranslator.Object, _toDtoTranslator.Object, _commands.Object, _queries.Object);
+    }
+
+    #region Student
+    [Fact(DisplayName = "GetStudent [Success]")]
+    public async Task GetStudent_Success()
+    {
+      //Arrange
+      var studentId = 40303L;
+      var currentDbStudent = CommonTestsFactory.CreateStudent("M", 4);
+      var translatedStudentDto = CommonTestsFactory.CreateStudentDto("M", 4, currentDbStudent);
+
+      _queries.Setup(q => q.GetStudent(studentId)).ReturnsAsync(currentDbStudent);
+      _toDtoTranslator.Setup(t => t.ToStudentDto(currentDbStudent)).ReturnsAsync(translatedStudentDto);
+
+      //Act
+      var currentStudent = await _services.GetStudent(studentId);
+
+      //Assert
+      Assert.NotNull(currentStudent);
+      _queries.Verify(q => q.GetStudent(studentId), Times.Once, "GetStudent should be called once");
+      _toDtoTranslator.Verify(t => t.ToStudentDto(currentDbStudent), Times.Once, "ToStudentDto should be called once");
     }
 
     [Fact(DisplayName = "InsertStudent [Success]")]
@@ -30,7 +53,7 @@ namespace CourseManagerServicesTests
       var studentDto = CommonTestsFactory.CreateStudentDto("M", 4);
       var student = CommonTestsFactory.CreateStudent(null, 0, studentDto);
 
-      _translator.Setup(t => t.ToStudent(studentDto, null)).ReturnsAsync(student);
+      _toEntityTranslator.Setup(t => t.ToStudent(studentDto, null)).ReturnsAsync(student);
       _commands.Setup(c => c.AddStudentAsync(student)).ReturnsAsync(3);
 
       //Act
@@ -38,7 +61,7 @@ namespace CourseManagerServicesTests
 
       //Assert
       Assert.Equal(3, response);
-      _translator.Verify(t => t.ToStudent(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
+      _toEntityTranslator.Verify(t => t.ToStudent(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
       _commands.Verify(c => c.AddStudentAsync(student), Times.Once, "AddStudentAsync should be called once");
     }
 
@@ -52,17 +75,19 @@ namespace CourseManagerServicesTests
       var updatedStudent = CommonTestsFactory.CreateStudent(null, 0, studentDto);
 
       _queries.Setup(q => q.GetStudent(studentId)).ReturnsAsync(currentStudent);
-      _translator.Setup(t => t.ToStudent(studentDto, currentStudent)).ReturnsAsync(updatedStudent);
+      _toEntityTranslator.Setup(t => t.ToStudent(studentDto, currentStudent)).ReturnsAsync(updatedStudent);
 
       //Act
       await _services.UpdateStudentAsync(studentId, studentDto);
 
       //Assert
       _queries.Verify(q => q.GetStudent(studentId), Times.Once, "GetStudent should be called once");
-      _translator.Verify(t => t.ToStudent(studentDto, currentStudent), Times.Once, "ToStudentTranslator should be called once");
+      _toEntityTranslator.Verify(t => t.ToStudent(studentDto, currentStudent), Times.Once, "ToStudentTranslator should be called once");
       _commands.Verify(c => c.SaveChangesAsync(), Times.Once, "SaveChangesAsync should be called once");
     }
+    #endregion
 
+    #region Course
     [Fact(DisplayName = "InsertCourse [Success]")]
     public async Task InsertCourse_Success()
     {
@@ -70,7 +95,7 @@ namespace CourseManagerServicesTests
       var courseDto = CommonTestsFactory.CreateCourseDto();
       var course = CommonTestsFactory.CreateCourse(courseDto);
 
-      _translator.Setup(t => t.ToCourse(courseDto, null)).ReturnsAsync(course);
+      _toEntityTranslator.Setup(t => t.ToCourse(courseDto, null)).ReturnsAsync(course);
       _commands.Setup(c => c.AddCourseAsync(course)).ReturnsAsync(3);
 
       //Act
@@ -78,7 +103,7 @@ namespace CourseManagerServicesTests
 
       //Assert
       Assert.Equal(3, response);
-      _translator.Verify(t => t.ToCourse(courseDto, null), Times.Once, "ToCourseTranslator should be called once");
+      _toEntityTranslator.Verify(t => t.ToCourse(courseDto, null), Times.Once, "ToCourseTranslator should be called once");
       _commands.Verify(c => c.AddCourseAsync(course), Times.Once, "AddCourseAsync should be called once");
     }
 
@@ -92,15 +117,16 @@ namespace CourseManagerServicesTests
       var updatedCourse = CommonTestsFactory.CreateCourse(courseDto);
 
       _queries.Setup(q => q.GetCourse(courseId)).ReturnsAsync(currentCourse);
-      _translator.Setup(t => t.ToCourse(courseDto, currentCourse)).ReturnsAsync(updatedCourse);
+      _toEntityTranslator.Setup(t => t.ToCourse(courseDto, currentCourse)).ReturnsAsync(updatedCourse);
 
       //Act
       await _services.UpdateCourseAsync(courseId, courseDto);
 
       //Assert
       _queries.Verify(q => q.GetCourse(courseId), Times.Once, "GetCourse should be called once");
-      _translator.Verify(t => t.ToCourse(courseDto, currentCourse), Times.Once, "ToCourseTranslator should be called once");
+      _toEntityTranslator.Verify(t => t.ToCourse(courseDto, currentCourse), Times.Once, "ToCourseTranslator should be called once");
       _commands.Verify(c => c.SaveChangesAsync(), Times.Once, "SaveChangesAsync should be called once");
     }
+    #endregion
   }
 }
