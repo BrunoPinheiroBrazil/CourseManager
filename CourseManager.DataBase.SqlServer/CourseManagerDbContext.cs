@@ -8,6 +8,7 @@ namespace CourseManager.DataBase.SqlServer
   {
     public CourseManagerDbContext(DbContextOptions<CourseManagerDbContext> options) : base(options) { }
     public DbSet<Student> Students { get; set; }
+    public DbSet<Course> Courses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

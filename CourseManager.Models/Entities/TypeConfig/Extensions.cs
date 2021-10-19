@@ -7,6 +7,7 @@ namespace CourseManager.Models.Entities.TypeConfig
     public static void ConfigureAllTypeConfig(this ModelBuilder modelBuilder)
     {
       modelBuilder.ApplyConfiguration(new StudentTypeConfig());
+      modelBuilder.ApplyConfiguration(new CourseTypeConfig());
     }
   }
 }

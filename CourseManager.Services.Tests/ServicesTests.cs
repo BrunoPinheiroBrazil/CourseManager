@@ -36,7 +36,25 @@ namespace CourseManagerServicesTests
       //Assert
       Assert.True(successfull);
       _translator.Verify(t => t.ToStudentTranslator(studentDto, null), Times.Once, "ToStudentTranslator should be called once");
-      _commands.Verify(c => c.SaveChangesAsync(), Times.Once, "SaveChangesAsync should be called once");
+      _commands.Verify(c => c.AddStudentAsync(student), Times.Once, "AddStudentAsync should be called once");
+    }
+
+    [Fact(DisplayName = "InsertCourse [Success]")]
+    public async Task InsertCourse_Success()
+    {
+      //Arrange
+      var courseDto = CommonTestsFactory.CreateCourseDto();
+      var course = CommonTestsFactory.CreateCourse(courseDto);
+
+      _translator.Setup(t => t.ToCourseTranslator(courseDto, null)).ReturnsAsync(course);
+
+      //Act
+      var successfull = await _services.InsertCourseAsync(courseDto);
+
+      //Assert
+      Assert.True(successfull);
+      _translator.Verify(t => t.ToCourseTranslator(courseDto, null), Times.Once, "ToCourseTranslator should be called once");
+      _commands.Verify(c => c.AddCourseAsync(course), Times.Once, "AddCourseAsync should be called once");
     }
   }
 }

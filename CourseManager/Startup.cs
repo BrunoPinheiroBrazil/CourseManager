@@ -27,13 +27,15 @@ namespace CourseManager
       AddSpaServices(services);
       services.AddDependencyServices();
       ConfigureDb(services);
+      services.AddSwaggerGen();
     }
 
     protected virtual void ConfigureDb(IServiceCollection services)
     {
-      var serviceProvider = services.BuildServiceProvider();
-      var options = serviceProvider.GetService<DbContextOptions<CourseManagerDbContext>>();
-      services.AddScoped(s => new CourseManagerDbContext(options));
+      services.AddDbContext<CourseManagerDbContext>(options =>
+      {
+        options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=BrunoEstudos;Trusted_Connection=True;MultipleActiveResultSets=true");
+      });
     }
 
     protected virtual void AddSpaServices(IServiceCollection services)
@@ -56,6 +58,10 @@ namespace CourseManager
       {
         app.UseExceptionHandler("/Error");
       }
+
+      app.UseSwagger();
+
+      app.UseSwaggerUI();
 
       app.UseRouting();
 

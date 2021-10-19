@@ -4,14 +4,16 @@ using CourseManager.DataBase.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManager.DataBase.SqlServer.Migrations
 {
     [DbContext(typeof(CourseManagerDbContext))]
-    partial class CourseManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211019002056_Adding Course Table")]
+    partial class AddingCourseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

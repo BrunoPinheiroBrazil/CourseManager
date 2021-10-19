@@ -7,9 +7,31 @@ namespace CourseManager.Models.Translators
   public interface IToEntityTranslator
   {
     Task<Student> ToStudentTranslator(StudentDto studentDto, Student student = null);
+    Task<Course> ToCourseTranslator(CourseDto courseDto, Course course = null);
   }
   public class ToEntityTranslator : IToEntityTranslator
   {
+    public async Task<Course> ToCourseTranslator(CourseDto courseDto, Course course = null)
+    {
+      if (course == null)
+        return await Task.FromResult(new Course
+        {
+          CourseCode = courseDto.CourseCode,
+          CourseName = courseDto.CourseName,
+          TeacherName = courseDto.TeacherName,
+          StartDate = courseDto.StartDate,
+          EndDate = courseDto.EndDate
+        });
+
+      course.CourseCode = courseDto.CourseCode;
+      course.CourseName = courseDto.CourseName;
+      course.TeacherName = courseDto.TeacherName;
+      course.StartDate = courseDto.StartDate;
+      course.EndDate = courseDto.EndDate;
+
+      return await Task.FromResult(course);
+    }
+
     public async Task<Student> ToStudentTranslator(StudentDto studentDto, Student student = null)
     {
       if (student == null)

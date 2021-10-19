@@ -24,6 +24,20 @@ namespace CourseManager.Common.Tests
       };
     }
 
+    public static CourseDto CreateCourseDto()
+    {
+      var randomString = RandomString(4);
+
+      return new CourseDto
+      {
+        CourseCode = $"CourseCode{randomString}",
+        CourseName = $"CourseName{randomString}",
+        TeacherName = $"TeacherName{randomString}",
+        StartDate = DateTime.Now,
+        EndDate = DateTime.Now
+      };
+    }
+
     public static Student CreateStudent(string gender, int randomLength, StudentDto studentDto = null)
     {
       if (studentDto != null)
@@ -48,6 +62,29 @@ namespace CourseManager.Common.Tests
         Address3 = $"SomeAddres3{randomString}",
         Gender = gender,
         Dob = DateTime.Now.AddYears(-30)
+      };
+    }
+
+    public static Course CreateCourse(CourseDto courseDto = null)
+    {
+      if (courseDto != null)
+        return new Course
+        {
+          CourseCode = courseDto.CourseCode,
+          CourseName = courseDto.CourseName,
+          TeacherName = courseDto.TeacherName,
+          StartDate = courseDto.StartDate,
+          EndDate = courseDto.EndDate
+        };
+
+      var randomString = RandomString(4);
+      return new Course
+      {
+        CourseCode = $"CourseCode{randomString}",
+        CourseName = $"CourseName{randomString}",
+        TeacherName = $"TeacherName{randomString}",
+        StartDate = DateTime.Now,
+        EndDate = DateTime.Now.AddDays(30)
       };
     }
 

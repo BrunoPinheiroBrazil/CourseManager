@@ -50,5 +50,30 @@ namespace CourseManager.Integration.Tests
       //Assert
       Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
+
+    [Fact(DisplayName = "Insert Course [Success]")]
+    public async Task Insert_Course_Success()
+    {
+      //Arrange
+      var url = "coursemanager/create/course";
+      var courseDto = new CourseDto
+      {
+        CourseCode = "AB5ED",
+        CourseName = "Magic",
+        TeacherName = "Dumbledore",
+        StartDate = DateTime.Now,
+        EndDate = DateTime.Now.AddMonths(1)
+      };
+
+      var courseDtoJson = JToken.FromObject(courseDto).ToString();
+
+      var httpMessageContent = new StringContent(courseDtoJson, Encoding.UTF8, "application/json");
+
+      //Act
+      var response = await _client.PostAsync(url, httpMessageContent);
+
+      //Assert
+      Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
   }
 }

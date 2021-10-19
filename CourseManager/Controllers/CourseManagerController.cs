@@ -24,5 +24,13 @@ namespace CourseManager.Controllers
 
       throw new Exception("An error ocurred during the creation of the student!");
     }
+
+    [HttpPost("create/course")]
+    public async Task<IActionResult> InsertCourse([FromBody] CourseDto courseDto)
+    {
+      if (await _services.InsertCourseAsync(courseDto))
+        return NoContent();
+      throw new Exception("An error ocurred during the creation of the course!");
+    }
   }
 }

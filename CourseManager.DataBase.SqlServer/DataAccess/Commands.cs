@@ -8,6 +8,7 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
   {
     Task SaveChangesAsync();
     Task AddStudentAsync(Student student);
+    Task AddCourseAsync(Course course);
   }
   public class Commands : ICommands
   {
@@ -16,6 +17,12 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
     public Commands(CourseManagerDbContext context)
     {
       _context = context;
+    }
+
+    public async Task AddCourseAsync(Course course)
+    {
+      await _context.AddAsync(course);
+      await SaveChangesAsync();
     }
 
     public async Task AddStudentAsync(Student student)

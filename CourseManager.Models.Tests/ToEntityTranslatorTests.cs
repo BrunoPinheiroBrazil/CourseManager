@@ -32,5 +32,22 @@ namespace CourseManager.Models.Tests
       Assert.Equal(studentDto.Address2, student.Address2);
       Assert.Equal(studentDto.Address3, student.Address3);
     }
+
+    [Fact(DisplayName = "ToCourse [Success]")]
+    public async Task ToCourse_Success()
+    {
+      //Arrange
+      var courseDto = CommonTestsFactory.CreateCourseDto();
+
+      //Act
+      var course = await _translator.ToCourseTranslator(courseDto);
+
+      //Assert
+      Assert.Equal(courseDto.CourseCode, course.CourseCode);
+      Assert.Equal(courseDto.CourseName, course.CourseName);
+      Assert.Equal(courseDto.TeacherName, course.TeacherName);
+      Assert.Equal(courseDto.StartDate, course.StartDate);
+      Assert.Equal(courseDto.EndDate, course.EndDate);
+    }
   }
 }

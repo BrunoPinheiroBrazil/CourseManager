@@ -8,6 +8,7 @@ namespace CourseManagerServices
   public interface IServices
   {
     Task<bool> InsertStudentAsync(StudentDto studentDto);
+    Task<bool> InsertCourseAsync(CourseDto courseDto);
   }
   public class Services : IServices
   {
@@ -19,11 +20,19 @@ namespace CourseManagerServices
       _commands = commands;
     }
 
+    public async Task<bool> InsertCourseAsync(CourseDto courseDto)
+    {
+      var course = await _toEntityTranslator.ToCourseTranslator(courseDto);
+
+      await _commands.AddCourseAsync(course);
+      return true;
+    }
+
     public async Task<bool> InsertStudentAsync(StudentDto studentDto)
     {
       var student = await _toEntityTranslator.ToStudentTranslator(studentDto);
 
-      await _commands.SaveChangesAsync();
+      await _commands.AddStudentAsync(student);
       return true;
     }
   }
