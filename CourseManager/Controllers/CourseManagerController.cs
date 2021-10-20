@@ -10,6 +10,8 @@ namespace CourseManager.Controllers
   [Route("[controller]")]
   public class CourseManagerController : ControllerBase
   {
+    private const int DEFAULT_PAGE_SIZE = 25;
+    private const int DEFAULT_PAGE = 1;
     private readonly IServices _services;
     public CourseManagerController(IServices services)
     {
@@ -46,6 +48,21 @@ namespace CourseManager.Controllers
     public async Task<IActionResult> GetStudent(long studentId)
     {
       return Ok(await _services.GetStudent(studentId));
+    }
+
+    [HttpPost("student")]
+    public async Task<IActionResult> SearchStudents([FromBody] SearchTermsDto searchTerms, [FromQuery] int pageSize = DEFAULT_PAGE_SIZE, [FromQuery] int page = DEFAULT_PAGE)
+    {
+      var (students, totalCount) = await _services.SearchStudentsAsync(searchTerms, pageSize, page);
+      var paginatedResultsDto = new PaginatedResultsDto<StudentDto>
+      {
+        Page = page,
+        PageSize = pageSize,
+        TotalCount = totalCount,
+        Values = students
+      };
+
+      return Ok(paginatedResultsDto);
     }
 
     [HttpDelete("delete/student/{studentId}")]

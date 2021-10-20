@@ -1,6 +1,10 @@
-﻿using CourseManager.Models.Entities;
+﻿using CourseManager.Models.Dtos;
+using CourseManager.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace CourseManager.DataBase.SqlServer.DataAccess
@@ -9,6 +13,7 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
   {
     Task<Student> GetStudent(long studentId);
     Task<Course> GetCourse(long courseId);
+    Task<(ICollection<Student>, int)> GetStudents(SearchTermsDto searchTermsDto, int page = 1, int pageSize = 25);
   }
   public class Queries : IQueries
   {
@@ -41,6 +46,43 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
       return _context.Courses
         .Where(s => s.CourseCode != null)
         .AsQueryable();
+    }
+
+    public async Task<(ICollection<Student>, int)> GetStudents(SearchTermsDto searchTermsDto, int page = 1, int pageSize = 25)
+    {
+      if (page < 1)
+        page = 1;
+
+      var orderedStudents = await SearchStudentQuery(searchTermsDto.FirstName).OrderBy(s => s.FirstName).ToListAsync();
+      var totalCount = orderedStudents.Count;
+
+      return (orderedStudents, totalCount);
+    }
+
+    private IQueryable<Student> SearchStudentQuery(string firstName = null)
+    {
+      var allQueriesOR = new List<Expression<Func<Student, bool>>>();
+      if (!string.IsNullOrEmpty(firstName))
+      {
+        ByFirstNameQuery(firstName, allQueriesOR);
+      }
+
+      if (allQueriesOR.Count == 0)
+      {
+        throw new ArgumentException("The serch query has no arguments. You can't call a search without filters");
+      }
+
+      return StudentWithIncludes().Where(allQueriesOR.Aggregate((q1, q2) => q1.Or(q2)));
+    }
+
+    private void ByFirstNameQuery(string firstName, List<Expression<Func<Student, bool>>> allQueriesOR)
+    {
+      Expression<Func<Student, bool>> byFirstNameOR()
+      {
+        return s => s.FirstName.Contains(firstName);
+      }
+
+      allQueriesOR.Add(byFirstNameOR());
     }
   }
 }

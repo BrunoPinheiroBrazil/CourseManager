@@ -1,5 +1,7 @@
 ﻿using CourseManager.Common.Tests;
+using CourseManager.Models.Entities;
 using CourseManager.Models.Translators;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,6 +27,24 @@ namespace CourseManager.Models.Tests
 
       //Assert
       await DtoAsserts.AssertStudentDto(student, studentDto);
+    }
+
+    [Fact(DisplayName = "ToStudentsDto [Success]")]
+    public async Task ToStudentsDto_Success()
+    {
+      //Arrange
+      var students = new List<Student>
+      {
+        CommonTestsFactory.CreateStudent("F", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+      };
+
+      //Act
+      var studentsDto = await _toDtoTranslator.ToStudentsDto(students);
+
+      //Assert
+      await DtoAsserts.AssertStudentsDto(students, studentsDto);
     }
   }
 }

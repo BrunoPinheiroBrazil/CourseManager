@@ -1,5 +1,8 @@
 ﻿using CourseManager.Common.Tests;
 using CourseManager.DataBase.SqlServer.DataAccess;
+using CourseManager.Models.Dtos;
+using CourseManager.Models.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,6 +42,55 @@ namespace CourseManager.DataStore.SqlServer.Tests
       Assert.Equal(student.Address2, currentStudent.Address2);
       Assert.Equal(student.Address3, currentStudent.Address3);
       Assert.Equal(student.Dob, currentStudent.Dob);
+    }
+
+    [Fact(DisplayName = "GetStudents [Success]")]
+    public async Task GetStudents_Success()
+    {
+      //Arrange
+      var students = new List<Student>
+      {
+        CommonTestsFactory.CreateStudent("F",4),
+        CommonTestsFactory.CreateStudent("F",4),
+        CommonTestsFactory.CreateStudent("F",4),
+        CommonTestsFactory.CreateStudent("F",4)
+      };
+
+      students.ForEach(s =>
+      {
+        s.FirstName = "DifferentFirstName";
+      });
+
+      var searchTermsDto = new SearchTermsDto
+      {
+        FirstName = "DifferentFirstName"
+      };
+
+      await _fixture.Context.AddRangeAsync(students);
+      await _fixture.Context.SaveChangesAsync();
+
+      //Act
+      var (currentStudents, totalCount) = await _queries.GetStudents(searchTermsDto);
+
+      //Assert
+      Assert.Equal(4, totalCount);
+      Assert.Collection(currentStudents, 
+      s1 =>
+      {
+        Assert.Equal("DifferentFirstName", s1.FirstName);
+      },
+      s2 =>
+      {
+        Assert.Equal("DifferentFirstName", s2.FirstName);
+      },
+      s3 =>
+      {
+        Assert.Equal("DifferentFirstName", s3.FirstName);
+      },
+      s4 =>
+      {
+        Assert.Equal("DifferentFirstName", s4.FirstName);
+      });
     }
 
     [Fact(DisplayName = "GetCourse [Success]")]

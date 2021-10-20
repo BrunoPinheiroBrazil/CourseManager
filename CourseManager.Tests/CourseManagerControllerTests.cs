@@ -5,6 +5,7 @@ using CourseManagerServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,6 +40,43 @@ namespace CourseManager.Tests
       Assert.Equal(StatusCodes.Status200OK, statusResult.StatusCode);
       Assert.IsType<StudentDto>(statusResult.Value);
       _services.Verify(s => s.GetStudent(studentId), Times.Once, "GetStudent should be called once.");
+    }
+
+    [Fact(DisplayName = "SearchStudent [Success]")]
+    public async Task SearchStudent_Success()
+    {
+      //Arrange
+      var totalCount = 5;
+      var searchTerms = new SearchTermsDto
+      {
+        FirstName = "SomeFirstName"
+      };
+
+      var paginatedResultsDto = new PaginatedResultsDto<StudentDto>
+      {
+        Page = 1,
+        PageSize = 25,
+        TotalCount = totalCount,
+        Values = new List<StudentDto>
+        {
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4)
+        }
+      };
+
+      _services.Setup(s => s.SearchStudentsAsync(searchTerms, 25, 1)).ReturnsAsync((paginatedResultsDto.Values, totalCount));
+
+      //Act
+      var response = await _controller.SearchStudents(searchTerms, 25, 1);
+
+      //Assert
+      var statusResult = Assert.IsType<OkObjectResult>(response);
+      Assert.Equal(StatusCodes.Status200OK, statusResult.StatusCode);
+      Assert.IsType<PaginatedResultsDto<StudentDto>>(statusResult.Value);
+      _services.Verify(s => s.SearchStudentsAsync(searchTerms, 25, 1), Times.Once, "SearchStudentsAsync should be called once.");
     }
 
     [Fact(DisplayName = "Add Student [Success]")]

@@ -1,11 +1,9 @@
 using CourseManager.Common.Tests;
 using CourseManager.Models.Dtos;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -34,6 +32,28 @@ namespace CourseManager.Integration.Tests
       //Assert
       Assert.Equal(HttpStatusCode.OK, StatusCode);
       Assert.IsType<StudentDto>(responseObject);
+      Assert.NotNull(responseObject);
+    }
+
+    [Fact(DisplayName = "Search Students [Success]")]
+    public async Task Search_Students_Success()
+    {
+      //Arrange
+      var url = $"coursemanager/student";
+      var searchTermsDto = new SearchTermsDto
+      {
+        FirstName = "SomeFirstName"
+      };
+
+      var searchTermsDtoJson = JToken.FromObject(searchTermsDto).ToString();
+
+      //Act
+      var (responseObject, StatusCode) = await _fixture.PostInApi<PaginatedResultsDto<StudentDto>>(url, searchTermsDtoJson);
+
+      //Assert
+      Assert.Equal(HttpStatusCode.OK, StatusCode);
+      var results = Assert.IsType<PaginatedResultsDto<StudentDto>>(responseObject);
+      Assert.True(results.Values.Any());
     }
 
     [Fact(DisplayName = "Insert Student [Success]")]
@@ -49,7 +69,7 @@ namespace CourseManager.Integration.Tests
       var statusCode = await _fixture.PostInApi(url, studentDtoJson);
 
       //Assert
-      Assert.Equal((int) HttpStatusCode.OK, statusCode);
+      Assert.Equal((int)HttpStatusCode.OK, statusCode);
     }
 
     [Fact(DisplayName = "Update Student [Success]")]
@@ -119,7 +139,7 @@ namespace CourseManager.Integration.Tests
       var statusCode = await _fixture.PostInApi(url, courseDtoJson);
 
       //Assert
-      Assert.Equal((int) HttpStatusCode.OK, statusCode);
+      Assert.Equal((int)HttpStatusCode.OK, statusCode);
     }
 
     [Fact(DisplayName = "Update Course [Success]")]

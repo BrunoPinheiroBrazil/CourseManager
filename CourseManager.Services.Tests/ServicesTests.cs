@@ -1,8 +1,11 @@
 using CourseManager.Common.Tests;
 using CourseManager.DataBase.SqlServer.DataAccess;
+using CourseManager.Models.Dtos;
+using CourseManager.Models.Entities;
 using CourseManager.Models.Translators;
 using CourseManagerServices;
 using Moq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -44,6 +47,47 @@ namespace CourseManagerServicesTests
       Assert.NotNull(currentStudent);
       _queries.Verify(q => q.GetStudent(studentId), Times.Once, "GetStudent should be called once");
       _toDtoTranslator.Verify(t => t.ToStudentDto(currentDbStudent), Times.Once, "ToStudentDto should be called once");
+    }
+
+    [Fact(DisplayName = "SearchStudents [Success]")]
+    public async Task SearchStudent_Success()
+    {
+      //Arrange
+      var page = 1;
+      var pageSize = 25;
+      var searchTermsDto = new SearchTermsDto
+      {
+        FirstName = "SomeFirstName"
+      };
+
+      var students = new List<Student>
+      {
+        CommonTestsFactory.CreateStudent("M", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+        CommonTestsFactory.CreateStudent("F", 4),
+      };
+
+      var studentsDto = new List<StudentDto>
+      {
+        CommonTestsFactory.CreateStudentDto("M", 4, students[0]),
+        CommonTestsFactory.CreateStudentDto("M", 4, students[1]),
+        CommonTestsFactory.CreateStudentDto("F", 4, students[2]),
+        CommonTestsFactory.CreateStudentDto("F", 4, students[3]),
+        CommonTestsFactory.CreateStudentDto("M", 4, students[4])
+      };
+
+      _queries.Setup(q => q.GetStudents(searchTermsDto, 1, 25)).ReturnsAsync((students, 5));
+      _toDtoTranslator.Setup(t => t.ToStudentsDto(students)).ReturnsAsync(studentsDto);
+
+      //Act
+      var (content, totalCound) = await _services.SearchStudentsAsync(searchTermsDto, pageSize, page);
+
+      //Assert
+      Assert.Equal(5, totalCound);
+      _queries.Verify(q => q.GetStudents(searchTermsDto, 1, 25), Times.Once, "GetStudents should be called once");
+      _toDtoTranslator.Verify(t => t.ToStudentsDto(students), Times.Once, "ToStudentsDto should be called once");
     }
 
     [Fact(DisplayName = "InsertStudent [Success]")]
