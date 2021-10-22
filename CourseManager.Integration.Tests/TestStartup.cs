@@ -28,5 +28,6 @@ namespace CourseManager.Integration.Tests
 
     protected override void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env) {}
     protected override void AddSpaServices(IServiceCollection services){}
+    protected override void MigrateDB(IApplicationBuilder app){}
   }
 }

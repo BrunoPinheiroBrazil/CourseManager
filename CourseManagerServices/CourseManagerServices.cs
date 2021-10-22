@@ -41,7 +41,7 @@ namespace CourseManagerServices
 
     public async Task<(ICollection<StudentDto> studentsDto, int totalCount)> SearchStudentsAsync(SearchTermsDto searchTerms, int pageSize, int page)
     {
-      var (students, totalCount) = await _queries.GetStudents(searchTerms);
+      var (students, totalCount) = await _queries.GetStudents(searchTerms, page, pageSize);
 
       var studentsDto = await _toDtoTranslator.ToStudentsDto(students);
 

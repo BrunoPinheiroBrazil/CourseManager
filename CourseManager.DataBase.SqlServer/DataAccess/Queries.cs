@@ -53,13 +53,14 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
       if (page < 1)
         page = 1;
 
-      var orderedStudents = await SearchStudentQuery(searchTermsDto.FirstName).OrderBy(s => s.FirstName).ToListAsync();
+      var orderedStudents = await SearchStudentQuery(searchTermsDto.FirstName, page, pageSize)
+        .OrderBy(s => s.FirstName).ToListAsync();
       var totalCount = orderedStudents.Count;
 
       return (orderedStudents, totalCount);
     }
 
-    private IQueryable<Student> SearchStudentQuery(string firstName = null)
+    private IQueryable<Student> SearchStudentQuery(string firstName = null, int page =  1, int pageSize = 25)
     {
       var allQueriesOR = new List<Expression<Func<Student, bool>>>();
       if (!string.IsNullOrEmpty(firstName))
@@ -72,7 +73,8 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
         throw new ArgumentException("The serch query has no arguments. You can't call a search without filters");
       }
 
-      return StudentWithIncludes().Where(allQueriesOR.Aggregate((q1, q2) => q1.Or(q2)));
+      var skippedRecords = pageSize * (page - 1);
+      return StudentWithIncludes().Where(allQueriesOR.Aggregate((q1, q2) => q1.Or(q2))).Skip(skippedRecords).Take(pageSize);
     }
 
     private void ByFirstNameQuery(string firstName, List<Expression<Func<Student, bool>>> allQueriesOR)

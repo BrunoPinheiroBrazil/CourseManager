@@ -72,6 +72,16 @@ namespace CourseManager
                   pattern: "{controller}/{action=Index}/{id?}");
       });
       ConfigSpa(app, env);
+      MigrateDB(app);
+    }
+
+    protected virtual void MigrateDB(IApplicationBuilder app)
+    {
+      using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+      {
+        var context = serviceScope.ServiceProvider.GetService<CourseManagerDbContext>();
+        context.Database.Migrate();
+      }
     }
 
     protected virtual void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env)
