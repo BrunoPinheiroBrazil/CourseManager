@@ -100,7 +100,7 @@ namespace CourseManager.Integration.Tests
 
       //Act
       //Assert
-      _ = await Assert.ThrowsAsync<Exception>(() => _fixture.PutInApi(url, studentDtoJson));
+      _ = await Assert.ThrowsAsync<InvalidOperationException>(() => _fixture.PutInApi(url, studentDtoJson));
     }
 
     [Fact(DisplayName = "Delete Student [Success]")]
@@ -170,7 +170,7 @@ namespace CourseManager.Integration.Tests
 
       //Act
       //Assert
-      _ = await Assert.ThrowsAsync<Exception>(() => _fixture.PutInApi(url, courseDtoJson));
+      _ = await Assert.ThrowsAsync<InvalidOperationException>(() => _fixture.PutInApi(url, courseDtoJson));
     }
     #endregion
   }
