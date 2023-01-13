@@ -5,14 +5,14 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { students: [], student: Object, loading: true };
+    this.state = { students: [], loading: true };
   }
 
   componentDidMount() {
     this.getStudent();
   }
 
-  static renderStudentData(student) {
+  static renderStudentData(students) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
@@ -28,15 +28,16 @@ export class FetchData extends Component {
         </thead>
         <tbody>
           {
-          <tr key={student.id}>
-            <td>{student.firstName}</td>
-            <td>{student.surName}</td>
-            <td>{student.gender}</td>
-            <td>{student.dob}</td>
-            <td>{student.address1}</td>
-            <td>{student.address2}</td>
-            <td>{student.address3}</td>
-          </tr>
+            students.map(student => 
+            <tr key={student.id}>
+              <td>{student.firstName}</td>
+              <td>{student.surName}</td>
+              <td>{student.gender}</td>
+              <td>{student.dob}</td>
+              <td>{student.address1}</td>
+              <td>{student.address2}</td>
+              <td>{student.address3}</td>
+            </tr>)
           }
         </tbody>
       </table>
@@ -46,11 +47,11 @@ export class FetchData extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderStudentData(this.state.student);
+      : FetchData.renderStudentData(this.state.students);
 
     return (
       <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
+        <h1 id="tabelLabel" >Students</h1>
         <p>This component demonstrates fetching data from the server.</p>
         {contents}
       </div>
@@ -58,10 +59,10 @@ export class FetchData extends Component {
   }
 
   async getStudent(studentID){
-    const response = await fetch(`coursemanager/student/${1}`);
+    const response = await fetch(`coursemanager/liststudents`);
     console.log(response);
     const data = await response.json();
-    console.log(data);
-    this.setState({ student: data, loading: false });
+    console.log(data.values);
+    this.setState({ students: data.values, loading: false });
   }
 }

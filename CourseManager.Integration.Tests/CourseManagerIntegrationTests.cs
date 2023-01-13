@@ -56,6 +56,21 @@ namespace CourseManager.Integration.Tests
       Assert.True(results.Values.Any());
     }
 
+    [Fact(DisplayName = "List Students [Success]")]
+    public async Task List_Students_Success()
+    {
+      //Arrange
+      var url = $"coursemanager/liststudents";
+
+      //Act
+      var (responseObject, StatusCode) = await _fixture.GetInApi<PaginatedResultsDto<StudentDto>>(url);
+
+      //Assert
+      Assert.Equal(HttpStatusCode.OK, StatusCode);
+      var results = Assert.IsType<PaginatedResultsDto<StudentDto>>(responseObject);
+      Assert.True(results.Values.Any());
+    }
+
     [Fact(DisplayName = "Insert Student [Success]")]
     public async Task Insert_Student_Success()
     {

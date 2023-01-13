@@ -44,6 +44,34 @@ namespace CourseManager.DataStore.SqlServer.Tests
       Assert.Equal(student.Dob, currentStudent.Dob);
     }
 
+    [Fact(DisplayName = "ListStudents [Success]")]
+    public async Task ListStudents_Success()
+    {
+      //Arrange
+      var students = new List<Student>
+      {
+        CommonTestsFactory.CreateStudent("M",4),
+        CommonTestsFactory.CreateStudent("F",4),
+        CommonTestsFactory.CreateStudent("M",4),
+        CommonTestsFactory.CreateStudent("F",4)
+      };
+
+      students.ForEach(s =>
+      {
+        s.FirstName = "AThirdDifferentName";
+      });
+
+      await _fixture.Context.AddRangeAsync(students);
+      await _fixture.Context.SaveChangesAsync();
+
+      //Act
+      var (currentStudents, totalCount) = await _queries.ListStudents(1, 4);
+
+      //Assert
+      Assert.Equal(4, totalCount);
+      Assert.Equal(4, currentStudents.Count);
+    }
+
     [Fact(DisplayName = "GetStudents [Success]")]
     public async Task GetStudents_Success()
     {
@@ -74,7 +102,7 @@ namespace CourseManager.DataStore.SqlServer.Tests
 
       //Assert
       Assert.Equal(4, totalCount);
-      Assert.Collection(currentStudents, 
+      Assert.Collection(currentStudents,
       s1 =>
       {
         Assert.Equal("DifferentFirstName", s1.FirstName);

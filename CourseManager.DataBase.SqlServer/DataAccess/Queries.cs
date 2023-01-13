@@ -14,6 +14,7 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
     Task<Student> GetStudent(long studentId);
     Task<Course> GetCourse(long courseId);
     Task<(ICollection<Student>, int)> GetStudents(SearchTermsDto searchTermsDto, int page = 1, int pageSize = 25);
+    Task<(ICollection<Student>, int)> ListStudents(int page = 1, int pageSize = 25);
   }
   public class Queries : IQueries
   {
@@ -85,6 +86,20 @@ namespace CourseManager.DataBase.SqlServer.DataAccess
       }
 
       allQueriesOR.Add(byFirstNameOR());
+    }
+
+    public async Task<(ICollection<Student>, int)> ListStudents(int page = 1, int pageSize = 25)
+    {
+      if (page < 1)
+        page = 1;
+
+      var skippedRecords = pageSize * (page - 1);
+      
+      var orderedStudents = await StudentWithIncludes().Skip(skippedRecords).Take(pageSize).OrderBy(s => s.FirstName).ToListAsync();
+      
+      var totalCount = orderedStudents.Count;
+
+      return (orderedStudents, totalCount);
     }
   }
 }

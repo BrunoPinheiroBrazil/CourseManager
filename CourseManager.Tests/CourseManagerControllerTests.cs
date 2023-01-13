@@ -79,6 +79,39 @@ namespace CourseManager.Tests
       _services.Verify(s => s.SearchStudentsAsync(searchTerms, 25, 1), Times.Once, "SearchStudentsAsync should be called once.");
     }
 
+    [Fact(DisplayName = "ListStudents [Success]")]
+    public async Task ListStudents_Success()
+    {
+      //Arrange
+      var totalCount = 5;
+
+      var paginatedResultsDto = new PaginatedResultsDto<StudentDto>
+      {
+        Page = 1,
+        PageSize = 25,
+        TotalCount = totalCount,
+        Values = new List<StudentDto>
+        {
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4),
+          CommonTestsFactory.CreateStudentDto("M", 4)
+        }
+      };
+
+      _services.Setup(s => s.ListStudentsAsync(25, 1)).ReturnsAsync((paginatedResultsDto.Values, totalCount));
+
+      //Act
+      var response = await _controller.ListStudents(25, 1);
+
+      //Assert
+      var statusResult = Assert.IsType<OkObjectResult>(response);
+      Assert.Equal(StatusCodes.Status200OK, statusResult.StatusCode);
+      Assert.IsType<PaginatedResultsDto<StudentDto>>(statusResult.Value);
+      _services.Verify(s => s.ListStudentsAsync(25, 1), Times.Once, "SearchStudentsAsync should be called once.");
+    }
+
     [Fact(DisplayName = "Add Student [Success]")]
     public async Task InsertStudent_Success()
     {

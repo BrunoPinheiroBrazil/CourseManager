@@ -16,14 +16,16 @@ namespace CourseManagerServices
     Task<StudentDto> GetStudent(long studentId);
     Task DeleteStudentAsync(long studentId);
     Task<(ICollection<StudentDto> studentsDto, int totalCount)> SearchStudentsAsync(SearchTermsDto searchTerms, int pageSize, int page);
+    Task<(ICollection<StudentDto> studentsDto, int totalCount)> ListStudentsAsync(int pageSize, int page);
   }
+
   public class Services : IServices
   {
     private readonly IToEntityTranslator _toEntityTranslator;
     private readonly IToDtoTranslator _toDtoTranslator;
     private readonly IQueries _queries;
     private readonly ICommands _commands;
-    public Services(IToEntityTranslator toEntityTranslator,IToDtoTranslator toDtoTranslator , ICommands commands, IQueries queries)
+    public Services(IToEntityTranslator toEntityTranslator, IToDtoTranslator toDtoTranslator, ICommands commands, IQueries queries)
     {
       _toEntityTranslator = toEntityTranslator;
       _toDtoTranslator = toDtoTranslator;
@@ -59,7 +61,7 @@ namespace CourseManagerServices
     {
       var course = await _queries.GetCourse(courseId);
 
-      if(course == null)
+      if (course == null)
         throw new Exception("Course does not exists!");
 
       await _toEntityTranslator.ToCourse(courseDto, course);
@@ -88,6 +90,15 @@ namespace CourseManagerServices
     {
       var student = await _queries.GetStudent(studentId);
       await _commands.RemoveStudentAsync(student);
+    }
+
+    public async Task<(ICollection<StudentDto> studentsDto, int totalCount)> ListStudentsAsync(int pageSize, int page)
+    {
+      var (students, totalCount) = await _queries.ListStudents(page, pageSize);
+
+      var studentsDto = await _toDtoTranslator.ToStudentsDto(students);
+
+      return (studentsDto, totalCount);
     }
   }
 }

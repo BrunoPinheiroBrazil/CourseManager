@@ -50,6 +50,22 @@ namespace CourseManager.Controllers
       return Ok(await _services.GetStudent(studentId));
     }
 
+    [HttpGet("liststudents")]
+    public async Task<IActionResult> ListStudents([FromQuery] int pageSize = DEFAULT_PAGE_SIZE, [FromQuery] int page = DEFAULT_PAGE)
+    {
+      var (students, totalCount) = await _services.ListStudentsAsync(pageSize, page);
+
+      var paginatedResultsDto = new PaginatedResultsDto<StudentDto>
+      {
+        Page = page,
+        PageSize = pageSize,
+        TotalCount = totalCount,
+        Values = students
+      };
+
+      return Ok(paginatedResultsDto);
+    }
+
     [HttpPost("student")]
     public async Task<IActionResult> SearchStudents([FromBody] SearchTermsDto searchTerms, [FromQuery] int pageSize = DEFAULT_PAGE_SIZE, [FromQuery] int page = DEFAULT_PAGE)
     {
