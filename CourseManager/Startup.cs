@@ -1,12 +1,5 @@
 using CourseManager.DataBase.SqlServer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 namespace CourseManager
 {
@@ -24,7 +17,6 @@ namespace CourseManager
     {
       services.AddControllersWithViews().AddNewtonsoftJson();
       services.AddMvc().AddApplicationPart(typeof(Startup).Assembly);
-      AddSpaServices(services);
       services.AddDependencyServices();
       ConfigureDb(services);
       services.AddSwaggerGen();
@@ -35,15 +27,6 @@ namespace CourseManager
       services.AddDbContext<CourseManagerDbContext>(options =>
       {
         options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=BrunoEstudos;Trusted_Connection=True;MultipleActiveResultSets=true");
-      });
-    }
-
-    protected virtual void AddSpaServices(IServiceCollection services)
-    {
-      // In production, the React files will be served from this directory
-      services.AddSpaStaticFiles(configuration =>
-      {
-        configuration.RootPath = "ClientApp/public";
       });
     }
 
@@ -71,7 +54,6 @@ namespace CourseManager
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
       });
-      ConfigSpa(app, env);
       MigrateDB(app);
     }
 
@@ -82,21 +64,6 @@ namespace CourseManager
         var context = serviceScope.ServiceProvider.GetService<CourseManagerDbContext>();
         context.Database.Migrate();
       }
-    }
-
-    protected virtual void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      app.UseStaticFiles();
-      app.UseSpaStaticFiles();
-      app.UseSpa(spa =>
-      {
-        spa.Options.SourcePath = "ClientApp";
-
-        if (env.IsDevelopment())
-        {
-          spa.UseReactDevelopmentServer(npmScript: "start");
-        }
-      });
     }
   }
 }

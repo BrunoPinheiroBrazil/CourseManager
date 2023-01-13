@@ -25,9 +25,6 @@ namespace CourseManager.Integration.Tests
       var options = serviceProvider.GetService<DbContextOptions<CourseManagerDbContext>>();
       services.AddScoped(s => new FakeDbContext(options));
     }
-
-    protected override void ConfigSpa(IApplicationBuilder app, IWebHostEnvironment env) {}
-    protected override void AddSpaServices(IServiceCollection services){}
     protected override void MigrateDB(IApplicationBuilder app){}
   }
 }
