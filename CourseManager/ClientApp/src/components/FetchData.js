@@ -5,33 +5,39 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = { students: [], student: Object, loading: true };
   }
 
   componentDidMount() {
-    this.populateWeatherData();
+    this.getStudent();
   }
 
-  static renderForecastsTable(forecasts) {
+  static renderStudentData(student) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
+            <th>First Name</th>
+            <th>Sur Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Address Line 1</th>
+            <th>Address Line 2</th>
+            <th>Address Line 3</th>
           </tr>
         </thead>
         <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
+          {
+          <tr key={student.id}>
+            <td>{student.firstName}</td>
+            <td>{student.surName}</td>
+            <td>{student.gender}</td>
+            <td>{student.dob}</td>
+            <td>{student.address1}</td>
+            <td>{student.address2}</td>
+            <td>{student.address3}</td>
+          </tr>
+          }
         </tbody>
       </table>
     );
@@ -40,7 +46,7 @@ export class FetchData extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+      : FetchData.renderStudentData(this.state.student);
 
     return (
       <div>
@@ -51,9 +57,11 @@ export class FetchData extends Component {
     );
   }
 
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  async getStudent(studentID){
+    const response = await fetch(`coursemanager/student/${1}`);
+    console.log(response);
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+    console.log(data);
+    this.setState({ student: data, loading: false });
   }
 }
